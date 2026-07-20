@@ -1,4 +1,4 @@
-name: etl pipeline
+name: ETL Pipeline
 
 on:
   push:
@@ -6,32 +6,49 @@ on:
       - main
 
 jobs:
-  extract-data-job:
+  extract:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Run extract_data.py
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Extract Script
         run: python extract_data.py
 
-  transform-data-job:
+  transform:
+    needs: extract
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Run transform_data.py
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Transform Script
         run: python transform_data.py
 
-  load-data-job:
+  load:
+    needs: transform
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - name: Run load_data.py
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run Load Script
         run: python load_data.py
